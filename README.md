@@ -12,6 +12,9 @@ d3vnull tool Installation steps:
 5. cd d3vnull
 6. chmod +x *
 7. ./install.sh
+8. leafpad d3vnull
+9. go to line 65 and enter your github token
+10. ./d3vnull
 
 install and setup Example:
 
