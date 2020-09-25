@@ -16,12 +16,12 @@ d3vnull tool Installation steps:
 install and setup Example:
 
 --------------------------------WarninG-------------------------------   
-
------------------it will update and upgrade your OS-------------------
+-----------------it will update and upgrade your OS-------------------  
 ---if you turn off your machine by accidentlally OS will be crash-----
 
 ------------if you want to stop this process press ctrl + Z------------
 ------------or leave it .it will start within 10 second----------------
+
 
 devnull tool Example:
 
