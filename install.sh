@@ -22,6 +22,7 @@ sudo apt-get -y upgrade
 sudo apt-get install cargo
 sudo apt install eyewitness
 sudo apt-get install python-requests
+sudo apt-get install gf-complete-tools
 sudo pip install requests
 sudo apt-get install python-dnspython
 sudo apt-get install python-argparse
@@ -56,6 +57,9 @@ echo 'export PATH=$GOPATH/bin:$GOROOT/bin:$PATH' >> ~/.bashacker
 
 go get -u github.com/tomnomnom/httprobe
 go get -u github.com/tomnomnom/assetfinder
+go get -u github.com/tomnomnom/gf
+echo 'source $GOPATH/src/github.com/tomnomnom/gf/gf-completion.bash' >> ~/.bashrc
+cp -r $GOPATH/src/github.com/tomnomnom/gf/examples ~/.gf
 
 cd sources
 git clone https://github.com/maurosoria/dirsearch.git
@@ -94,8 +98,8 @@ unzip P4R4M-HUNT3R.zip
 rm P4R4M-HUNT3R.zip
 pip3 install -r ~/tools/d3vnull/sources/P4R4M-HUNT3R/requirements.txt
 pip install -r ~/tools/d3vnull/sources/P4R4M-HUNT3R/requirements.txt
-
-
+cp ~/tools/P4R4M-HUNT3R/P4R4M-HUNT3R/gf_profiles/*.json ~/.gf/ 
+source ~/.bashrc
 clear
 
 echo " installation completed 100%"
