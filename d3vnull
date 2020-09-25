@@ -1,0 +1,144 @@
+#!/bin/bash
+
+source ~/.bashacker
+
+#color
+
+red='\e[1;31m%s\e[0m\n'
+green='\e[1;32m%s\e[0m\n'
+yellow='\e[1;33m%s\e[0m\n'
+blue='\e[1;34m%s\e[0m\n'
+magenta='\e[1;35m%s\e[0m\n'
+cyan='\e[1;36m%s\e[0m\n'
+##################################################################
+clear
+echo ""
+./.banner
+echo ""
+#dir setup
+read -p  "Enter the company name: " cm
+mkdir ~/recon/$cm
+cd ~/recon/$cm
+read -p "Enter the root Domain: " dm
+clear
+#################################################################
+# assetfinder
+printf "$green"   "...assetfinder started..."
+printf "$cyan"    "...Domain = $dm..."
+printf ""
+sleep 1
+assetfinder --subs-only $dm > assetfinder.txt
+##################################################################
+#clear
+sleep 1
+printf "$green"   "...findomain started..."
+printf "$cyan"    "...Domain = $dm..."
+echo ""
+findomain -t $dm -u findomain.txt
+##################################################################
+#clear
+sleep 1
+printf "$green"   "...sublist3r started..."
+printf "$cyan"    "...Domain = $dm..."
+echo ""
+cd
+cd tools/d3vnull/sources/Sublist3r/
+python sublist3r.py -d $dm -no ~/recon/$cm/sublister.txt
+cd ~/recon/$cm/
+##################################################################
+#clear
+echo ""
+sleep 1
+printf "$green"   "...subfinder started..."
+printf "$cyan"    "...Domain = $dm..."
+echo ""
+subfinder -d $dm -o ~/recon/$cm/subfinder.txt
+##################################################################
+#clear
+sleep 1
+echo ""
+printf "$green"   "...github recon started..."
+printf "$cyan"    "...Domain = $dm..."
+echo ""
+cd
+cd tools/d3vnull/sources/github-search/
+python github-subdomains.py -t <YOUR-TOKEN> -d $dm | tee ~/recon/$cm/githubrecon.txt
+cd ~/recon/$cm/
+##################################################################
+#clear
+sleep 1
+echo ""
+printf "$green"   "...subbrute started..."
+printf "$cyan"    "...Domain = $dm..."
+echo ""
+cd
+cd tools/d3vnull/sources/subbrute/
+./subbrute.py $dm -o ~/recon/$cm/subrute.txt
+cd
+##################################################################
+# short all domains into one
+echo ""
+printf "$yellow"  "removing duplicates"
+cd ~/recon/$cm/
+cat *.txt | sort -u > ~/recon/$cm/devnull.txt
+cat devnull.txt | wc -l
+##################################################################
+# finding live domains
+printf "$green"   "Scanning for live domaind"
+cat devnull.txt | httprobe -c 50 -t 3000 -p 443 | tee -a ~/recon/$cm/live.txt
+cat live.txt | wc -l
+##################################################################
+# grep https domains
+printf "$green"   "grep only https"
+cat live.txt | grep "https" | cut -d"/" -f3 > ~/recon/$cm/live-https.txt
+cat live-https.txt | wc -l
+##################################################################
+# aquatone
+printf "$green"   "taking screenshorts in live https domains"
+cat devnull.txt | ~/tools/d3vnull/sources/aquatone/aquatone -out ~/recon/$cm/aquatone
+##################################################################
+# eyewithness
+printf "$green"   "Taking screenshorts"
+#mkdir ~/recon/$cm/screenshort
+eyewitness -f ~/recon/$cm/devnull.txt -d ~/recon/$cm/screenshort/
+##################################################################
+# dir search
+printf "$green"   "dir search"
+printf "$yellow"  "if you dont want to run this press 'ctrl + c to stop"
+mkdir ~/recon/$cm/dirsearch
+cd ~/recon/$cm/
+pwd > path.txt
+ph=$(< path.txt)
+while read -r data ; do
+echo " Domain : $data"
+cd ~/recon/$cm/dirsearch
+cd ~/tools/d3vnull/sources/dirsearch/
+python3 dirsearch.py -u $data -e php,asp,aspx,net,js,cs,php2,php3,php4,php5,php6,php7,jsp,java,python,yaml,yml,config,conf,htaccess,htpasswd,shtml | tee ~/recon/$cm/dirsearch/$data.txt
+done < $ph/devnull.txt
+cd ~/recon/$cm/dirsearch/
+cat ~/recon/$cm/dirsearch/*.txt >> ~/recon/$cm/dirsearch.txt
+cd
+##################################################################
+# Finding params
+cd ~/recon/$cm/
+pwd > path.txt
+ph=$(< path.txt)
+printf "$green"   "Findigs parram"
+mkdir $ph/params
+cd $ph/params
+while read -r line ; do
+ echo " Domain : $line"
+python3 ~/tools/d3vnull/sources/P4R4M-HUNT3R/param-hunter.py --domain $line > $ph/params/$line.txt
+done < ~/recon/$cm/devnull.txt
+cat *.txt > ~/recon/$cm/params.txt
+cd output 
+cat *.txt >> ~/recon/$cm/params.txt
+rm $ph/path.txt
+cd ~/recon/$cm/
+##################################################################
+# Finding vulnerables
+printf "$green"   "Findigs xss"
+gf xss params.txt | tee xss.txt
+
+gf redirect params.txt | tee redirects.txt
+
