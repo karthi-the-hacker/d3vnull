@@ -85,7 +85,7 @@ sudo pip3 install -r ~/tools/d3vnull/sources/github-search/requirements3.txt
 
 cd subfinder/v2/cmd/subfinder
 go build
-mv subfinder /usr/local/bin/
+sudo mv subfinder /usr/local/bin/
 cd ../../../../
 
 cd findomain
