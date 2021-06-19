@@ -62,7 +62,7 @@ printf "$cyan"    "...Domain = $dm..."
 echo ""
 cd
 cd tools/d3vnull/sources/github-search/
-python github-subdomains.py -t <YOUR-TOKEN> -d $dm | tee ~/recon/$cm/githubrecon.txt
+python github-subdomains.py -t <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> -d $dm | tee ~/recon/$cm/githubrecon.txt
 cd ~/recon/$cm/
 ##################################################################
 #clear
