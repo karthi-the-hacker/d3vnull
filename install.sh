@@ -5,8 +5,6 @@ clear
 mkdir ~/recon
 mkdir ~/tools
 
-
-
 echo "--------------------------------WarninG-------------------------------"
 sleep 2
 echo "-----------------it will update and upgrade your OS-------------------"
