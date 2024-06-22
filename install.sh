@@ -13,6 +13,7 @@ sleep 2
 echo "------------if you want to stop this process press ctrl + Z------------"
 echo "------------or leave it .it will start within 10 second----------------"
 sleep 10
+
 sudo apt-get -y update
 sudo apt-get -y upgrade
 sudo apt-get install cargo
