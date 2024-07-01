@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 clear
 mkdir ~/recon
 mkdir ~/tools
