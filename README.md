@@ -39,3 +39,4 @@ devnull tool Example:
 
 Enter the company name: bing  
 Enter the root Domain: bing.com
+
